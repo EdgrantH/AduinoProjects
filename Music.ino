@@ -13,17 +13,21 @@ float tempo_to_millis(int tempo){
   return duration;
 }
 
-void play_normal(Tone *notePlayer, float one_per_quarterNote, float *pitch, int tempo){
-  float duration = (float)1 / one_per_quarterNote * tempo_to_millis(tempo);
-  notePlayer[0].play(pitch[0], duration);
-  notePlayer[1].play(pitch[1], duration);
-  // delay(duration*1);
-  delay(duration*0.9);
-  notePlayer[0].stop();
-  notePlayer[1].stop();
-  delay(duration*0.1);
-}
+// void play_normal(Tone *notePlayer, float one_per_quarterNote, float *pitch, int tempo){
+//   float duration = (float)1 / one_per_quarterNote * tempo_to_millis(tempo);
+//   notePlayer[0].play(pitch[0], duration);
+//   notePlayer[1].play(pitch[1], duration);
+//   // delay(duration*1);
+//   delay(duration*0.9);
+//   notePlayer[0].stop();
+//   notePlayer[1].stop();
+//   delay(duration*0.1);
+// }
 
+void play_unatached(Tone notePlayer, float one_per_quarterNote, float pitch, int tempo, int noteNum){
+  float duration = (float)1 / one_per_quarterNote * tempo_to_millis(tempo);
+
+}
 
 
 void setup(){
