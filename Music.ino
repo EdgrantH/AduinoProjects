@@ -2,7 +2,7 @@
 #include "pitches.h"
 #include <Tone.h>
 
-#define NOTENUM 94
+#define NOTENUM 110
 
 const int Buzzer1 = 10; //buzzer1 to arduino pin 9
 const int Buzzer2 = 9; //buzzer2 to arduino pin 10 
@@ -17,11 +17,11 @@ void play_normal(Tone *notePlayer, float one_per_quarterNote, float *pitch, int 
   float duration = (float)1 / one_per_quarterNote * tempo_to_millis(tempo);
   notePlayer[0].play(pitch[0], duration);
   notePlayer[1].play(pitch[1], duration);
-  delay(duration*1);
-  // delay(duration*0.75);
+  // delay(duration*1);
+  delay(duration*0.9);
   notePlayer[0].stop();
   notePlayer[1].stop();
-  // delay(duration*0.25);
+  delay(duration*0.1);
 }
 
 
@@ -29,8 +29,8 @@ void play_normal(Tone *notePlayer, float one_per_quarterNote, float *pitch, int 
 void setup(){
   Tone notePlayer[2];
 
-  notePlayer[1].begin(9);
-  notePlayer[0].begin(10);
+  notePlayer[1].begin(10);
+  notePlayer[0].begin(9);
 
   int tempo = 120;
   float durPitch[NOTENUM][2][2] = {
@@ -142,11 +142,32 @@ void setup(){
     {{1}, {E5, A3}},
     {{1}, {D5, F3}},
     {{1}, {D5, G3}},
-    {{0.5}, {C5, C3}}
+    {{0.5}, {C5, C3}},
+
+    
+    {{4}, {D5, C3}},
+    {{4}, {C5, C3}},
+    {{4}, {B4, C3}},
+    {{4}, {C5, C3}},
+    {{4}, {B4, C4}},
+    {{4}, {C5, C4}},
+    {{4}, {B4, C4}},
+    {{4}, {C5, C4}},
+    
+    {{4}, {A5, E4}},
+    {{4}, {G5, E4}},
+    {{4}, {Fs5, E4}},
+    {{4}, {G5, E4}},
+    {{4}, {Fs5, C4}},
+    {{4}, {G5, C4}},
+    {{4}, {Fs5, C4}},
+    {{4}, {G5, C4}}
+
+    
   };
 
   for (int i = 0; i < NOTENUM; i++){
-    play_normal(notePlayer, durPitch[i][0][0], durPitch[i][1], 120);
+    play_normal(notePlayer, durPitch[i][0][0], durPitch[i][1], tempo);
   }
 
 }
