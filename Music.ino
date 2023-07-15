@@ -2,7 +2,7 @@
 #include "pitches.h"
 #include <Tone.h>
 
-#define NOTENUM 150
+#define NOTENUM 94
 
 const int Buzzer1 = 10; //buzzer1 to arduino pin 9
 const int Buzzer2 = 9; //buzzer2 to arduino pin 10 
