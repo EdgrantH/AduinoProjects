@@ -2,11 +2,24 @@
 #include "pitches.h"
 #include <Tone.h>
 
-#define NOTENUM 110
-
 const int Buzzer1 = 10; //buzzer1 to arduino pin 9
 const int Buzzer2 = 9; //buzzer2 to arduino pin 10 
 int lampOn = 1;
+
+
+Tone notePlayer[2];
+int tempo = 120;
+float durPitch[2][2][9] = {
+  {
+    {C5,D5,E5,F5,G5,F5,E5,C5,-1},//pitch1
+    {1,1,1,1,1,1,1,1,-1}//dur1
+  
+  },
+  {
+    {C6,D6,E6,F6,G6,F6,E6,C6,-1},//pitch2
+    {1,1,1,1,1,1,1,1,-1}//dur2
+  },
+};
 
 float tempo_to_millis(int tempo){
   float duration = (float)60*1000/(float)tempo;
@@ -24,158 +37,33 @@ float tempo_to_millis(int tempo){
 //   delay(duration*0.1);
 // }
 
-void play_unatached(Tone notePlayer, float one_per_quarterNote, float pitch, int tempo, int noteNum){
-  float duration = (float)1 / one_per_quarterNote * tempo_to_millis(tempo);
+void play_unatached(Tone notePlayer, float one_per_quarterNote[], float pitch[], int tempo, int noteNum){
+  // Base case
+  if (pitch[noteNum] <= -1) return;
+
+  float durationMs = (float)1 / one_per_quarterNote[noteNum] * tempo_to_millis(tempo);
+  float timeStart = millis();
+  notePlayer.play(pitch[noteNum], durationMs);
+
+  if (millis() > timeStart + durationMs){
+    play_unatached(notePlayer, one_per_quarterNote[], pitch[], tempo, noteNum + 1);
+  }
 
 }
 
 
 void setup(){
-  Tone notePlayer[2];
-
   notePlayer[1].begin(10);
   notePlayer[0].begin(9);
 
-  int tempo = 120;
-  float durPitch[NOTENUM][2][2] = {
-    {{1}, {C5, C3}},
-    {{1}, {C5, C4}},
-    {{1}, {G5, E4}},
-    {{1}, {G5, C4}},
-    {{1}, {A5, F4}},
-    {{1}, {A5, C4}},
-    {{1}, {G5, E4}},
-    {{1}, {G5, C4}},
 
-    {{1}, {F5, D4}},
-    {{1}, {F5, B3}},
-    {{1}, {E5, C4}},
-    {{1}, {E5, A3}},
-    {{1}, {D5, F3}},
-    {{1}, {D5, G3}},
-    {{0.5}, {C5, C3}},
-    
-
-    {{1}, {C5, C3}},
-    {{1}, {C5, C4}},
-    {{1}, {G5, E4}},
-    {{1}, {G5, C4}},
-    {{1}, {A5, F4}},
-    {{1}, {A5, C4}},
-    {{1}, {G5, E4}},
-    {{1}, {G5, C4}},
-
-    {{1}, {F5, D4}},
-    {{1}, {F5, B3}},
-    {{1}, {E5, C4}},
-    {{1}, {E5, A3}},
-    {{1}, {D5, F3}},
-    {{1}, {D5, G3}},
-    {{0.5}, {C5, C3}},
-    
-
-    {{1}, {G5, E4}},
-    {{1}, {G5, G3}},
-    {{1}, {F5, D4}},
-    {{1}, {F5, G3}},
-    {{1}, {E5, C4}},
-    {{1}, {E5, G3}},
-    {{1}, {D5, B3}},
-    {{1}, {D5, G3}},
-    
-    {{1}, {G5, E4}},
-    {{1}, {G5, G3}},
-    {{1}, {F5, D4}},
-    {{1}, {F5, G3}},
-    {{1}, {E5, C4}},
-    {{1.25}, {E5, C4}},
-    {{4}, {F5, D4}},
-    {{1}, {E5, C4}},
-    {{1}, {D5, C4}},
-    
-    {{1}, {C5, C3}},
-    {{1}, {C5, C4}},
-    {{1}, {G5, E4}},
-    {{1}, {G5, C4}},
-    {{1}, {A5, F4}},
-    {{1}, {A5, C4}},
-    {{1}, {G5, E4}},
-    {{1}, {G5, C4}},
-
-    {{1}, {F5, D4}},
-    {{1}, {F5, B3}},
-    {{1}, {E5, C4}},
-    {{1}, {E5, A3}},
-    {{1}, {D5, F3}},
-    {{1}, {D5, G3}},
-    {{0.5}, {C5, C3}},
-
-    
-
-    {{1}, {G5, E4}},
-    {{1}, {G5, G3}},
-    {{1}, {F5, D4}},
-    {{1}, {F5, G3}},
-    {{1}, {E5, C4}},
-    {{1}, {E5, G3}},
-    {{1}, {D5, B3}},
-    {{1}, {D5, G3}},
-    
-    {{1}, {G5, E4}},
-    {{1}, {G5, G3}},
-    {{1}, {F5, D4}},
-    {{1}, {F5, G3}},
-    {{1}, {E5, C4}},
-    {{1.25}, {E5, C4}},
-    {{4}, {F5, D4}},
-    {{1}, {E5, C4}},
-    {{1}, {D5, C4}},
-    
-    {{1}, {C5, C3}},
-    {{1}, {C5, C4}},
-    {{1}, {G5, E4}},
-    {{1}, {G5, C4}},
-    {{1}, {A5, F4}},
-    {{1}, {A5, C4}},
-    {{1}, {G5, E4}},
-    {{1}, {G5, C4}},
-
-    {{1}, {F5, D4}},
-    {{1}, {F5, B3}},
-    {{1}, {E5, C4}},
-    {{1}, {E5, A3}},
-    {{1}, {D5, F3}},
-    {{1}, {D5, G3}},
-    {{0.5}, {C5, C3}},
-
-    
-    {{4}, {D5, C3}},
-    {{4}, {C5, C3}},
-    {{4}, {B4, C3}},
-    {{4}, {C5, C3}},
-    {{4}, {B4, C4}},
-    {{4}, {C5, C4}},
-    {{4}, {B4, C4}},
-    {{4}, {C5, C4}},
-    
-    {{4}, {A5, E4}},
-    {{4}, {G5, E4}},
-    {{4}, {Fs5, E4}},
-    {{4}, {G5, E4}},
-    {{4}, {Fs5, C4}},
-    {{4}, {G5, C4}},
-    {{4}, {Fs5, C4}},
-    {{4}, {G5, C4}}
-
-    
-  };
-
-  for (int i = 0; i < NOTENUM; i++){
-    play_normal(notePlayer, durPitch[i][0][0], durPitch[i][1], tempo);
-  }
+  // for (int i = 0; i < NOTENUM; i++){
+  //   play_normal(notePlayer, durPitch[i][0][0], durPitch[i][1], tempo);
+  // }
 
 }
 
 void loop(){
+  play_unatached(notePlayer[0], durPitch[0][1], durPitch[0][0], tempo, 0);
 }
 
